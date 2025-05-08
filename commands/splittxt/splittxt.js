@@ -1,0 +1,1 @@
+showTextDialog(splitSentence(readRawText(getVars("argv1"))).join(" "));

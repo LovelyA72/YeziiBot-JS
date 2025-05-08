@@ -1,0 +1,1 @@
+alert("Hiragana Learner\n和[MLT:nick]学习平假名\n\n指令格式：%gana 答案\n不提供任何答案即为生成新的问题\n\n示例：%gana\n%gana ka");

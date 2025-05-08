@@ -1,0 +1,1 @@
+alert("掷骰子\n\n指令格式：%dice xdy\n\n示例：%dice 1d6\n%dice 2d8");

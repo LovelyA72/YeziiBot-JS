@@ -1,0 +1,1 @@
+alert("Regex Runner\n正则查找器\n\n指令格式：%regex 表达式 被查询字符串\n示例：%regex \\d+ Is this the year 2024 or 2023?");

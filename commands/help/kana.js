@@ -1,0 +1,1 @@
+alert("Katakana Learner\n和[MLT:nick]学习片假名\n\n指令格式：%kana 答案\n不提供任何答案即为生成新的问题\n\n示例：%kana\n%kana ka");
