@@ -19,8 +19,8 @@ function doTimeActivity(cycle) {
             isRestocked = true;
             restockCounter = 0;
         }
-        modHg-=2;
-        modTh-=6;
+        modHg-=1;
+        modTh-=3;
         if((getHunger()+modHg)<35){
             modSan-=2;
             modRom-=1;

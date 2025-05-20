@@ -16,13 +16,18 @@ function updateExp() {
         if (expressionsPtrs.length > 0){
             sprSetVis(expressionsPtrs[0],true);
         }
-        sprSetVis(pMusicNote,true);
+        if(isSane()){
+            sprSetVis(pMusicNote,true);
+        }else{
+            sprSetVis(pMusicNote,false);
+        }
     }else{
         expressionsPtrs.forEach(x => {
             sprSetVis(x,false);
         });
         sprSetVis(expressionsPtrs[expOverride],true);
         sprSetVis(pMusicNote,false);
+        consoleLog("heh")
         expressionTimer--;
     }
 }

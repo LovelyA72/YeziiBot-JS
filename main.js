@@ -28,12 +28,12 @@ let wingLoc = 0;
 
 let isClicked = 0;
 
-let brBox = new Box(getArea("breast"));
-let tlBox = new Box(getArea("tail"));
-let leBox = new Box(getArea("left_ear"));
-let reBox = new Box(getArea("right_ear"));
+let brBox;
+let tlBox;
+let leBox;
+let reBox;
 
-const YZJS_VERSION = "0.7.0";
+const YZJS_VERSION = "0.7.1";
 
 const hentai = ["变态", "垃圾", "恶心"];
 
@@ -53,14 +53,23 @@ function init() {
             exit();
         }
         setSettings("name",nameResult);
+        setHunger(10000);
+        setThirst(10000);
+        setMorale(5000);
     }
+
+    brBox = new Box(getArea("breast"));
+    tlBox = new Box(getArea("tail"));
+    leBox = new Box(getArea("left_ear"));
+    reBox = new Box(getArea("right_ear"));
+
     pChar = loadSprite("bg1.png", "bg1", 20);
     sprSetSize(pChar, 160, 240);
     sprSetLoc(pChar, 32, 62);
     sprSetVis(pChar, true);
     pMusicNote = loadSprite("note.png", "musicNote", 30);
     sprSetSize(pMusicNote, 20, 20);
-    sprSetVis(pMusicNote, true);
+    sprSetVis(pMusicNote, false);
     initItems();
     chatInit();
     initExp();
@@ -80,11 +89,6 @@ function init() {
 function update() {
     //Called every tick
     updateExp();
-    if(isSane()){
-        sprSetVis(pMusicNote,true);
-    }else{
-        sprSetVis(pMusicNote,false);
-    }
     sprSetLoc(pMusicNote, rand(50, 100), rand(50, 100));
     if (wingLoc) {
         sprSetLoc(pLeftWing, 50, 95);
