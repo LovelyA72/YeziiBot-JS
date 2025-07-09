@@ -8,6 +8,8 @@
 // Redistribution must be done in human readable
 // form. No code obfuscation is permitted.
 **********************************************/
+include("nerdamer.min.js");
+
 include("rand.js");
 include("box.js");
 include("chat.js");

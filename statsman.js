@@ -112,7 +112,7 @@ function modHunger(n,isFromConsumed=false) {
         n = -currentVal;
     }
     if(isFromConsumed){
-        if(getMorale()==10000){
+        if(getMorale()==9000){
             modRomance(Math.round(n/3));
         }
         modMorale(n/16);
@@ -136,7 +136,7 @@ function modThirst(n,isFromConsumed=false) {
         n = -currentVal;
     }
     if(isFromConsumed){
-        if(getMorale()==10000){
+        if(getMorale()==9000){
             modRomance(Math.round(n/3.6));
         }
         modMorale(n/24);

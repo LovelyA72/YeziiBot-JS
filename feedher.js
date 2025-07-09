@@ -6,3 +6,4 @@
 modHunger(10000);
 modThirst(10000);
 modMorale(10000);
+say("呜呜呜下一次不可以晾我这么久了哦...");
