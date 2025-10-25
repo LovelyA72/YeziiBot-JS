@@ -184,3 +184,56 @@ function modRomance(n){
     flushSaveData();
 }
 
+function modMoraleLimited(n) {
+    if (n <= 0) return; // only positive gain is affected by the limit
+
+    let sanityLimit = getSaveDataNumber("sanity_gain_limit");
+    if (isNaN(sanityLimit)) sanityLimit = SAN_LIM;
+
+    // If limit is zero, no gain possible
+    if (sanityLimit <= 0) {
+        return;
+    }
+
+    // Limit the gain by available sanity limit
+    let allowedGain = Math.min(n, sanityLimit);
+
+    // Apply morale gain within normal system bounds
+    let currentVal = getSaveDataNumber("cs_morale");
+    if ((currentVal + allowedGain) > moraleMax) {
+        allowedGain = moraleMax - currentVal;
+    }
+
+    let displayVal = (allowedGain / 100.0).toFixed(2);
+    if (allowedGain > 0) {
+        showFloatingMessageColor("SAN +" + displayVal, 5, 20, 255, 20);
+    }
+
+    setSaveDataNumber("cs_morale", currentVal + allowedGain);
+    setSaveDataNumber("sanity_gain_limit", Math.max(0, sanityLimit - allowedGain));
+    consoleLog("Modded sanity to "+(currentVal + allowedGain)+" with remains "+sanityLimit);
+    flushSaveData();
+}
+
+function modRomanceLimited(n) {
+    if (n <= 0) return;
+
+    let affectionLimit = getSaveDataNumber("affection_gain_limit");
+    if (isNaN(affectionLimit)) affectionLimit = ROM_LIM;
+
+    if (affectionLimit <= 0) {
+        return;
+    }
+
+    let allowedGain = Math.min(n, affectionLimit);
+
+    let currentVal = getSaveDataNumber("cs_romance");
+    let newVal = currentVal + allowedGain;
+    let displayVal = (allowedGain / 100.0).toFixed(2);
+
+    showFloatingMessageColor("♥ +" + displayVal, 5, 20, 255, 20);
+    setSaveDataNumber("cs_romance", newVal);
+    setSaveDataNumber("affection_gain_limit", Math.max(0, affectionLimit - allowedGain));
+    consoleLog("Modded romance to "+(currentVal + allowedGain)+" with remains "+affectionLimit);
+    flushSaveData();
+}

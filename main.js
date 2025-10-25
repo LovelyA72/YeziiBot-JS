@@ -34,16 +34,23 @@ let brBox;
 let tlBox;
 let leBox;
 let reBox;
+let hdBox;
 
-const YZJS_VERSION = "0.7.1";
+const SAN_LIM = 100;
+const ROM_LIM = 20;
+
+const SAN_GAIN = 20;
+const ROM_GAIN = 5;
+
+const YZJS_VERSION = "0.7.2";
 
 const hentai = ["变态", "垃圾", "恶心"];
 
 function init() {
     //Called when first starting the software
     consoleLog("=======================================");
-    consoleLog("YeziiBot.js 0.6.1 beta");
-    consoleLog("Now you are chatting with JS power!");
+    consoleLog("YeziiBot.js 0.7.2 beta");
+    consoleLog("Greetings from NYU ITP!");
     consoleLog("=======================================");
     consoleLog("");
     if (getSetting("test1") == "") {
@@ -55,15 +62,19 @@ function init() {
             exit();
         }
         setSettings("name",nameResult);
+        //attempt to use AMLT2025 skin as default
+        setSettings("resourcepack","shimeji");
         setHunger(10000);
         setThirst(10000);
         setMorale(5000);
+        restart();
     }
 
     brBox = new Box(getArea("breast"));
     tlBox = new Box(getArea("tail"));
     leBox = new Box(getArea("left_ear"));
     reBox = new Box(getArea("right_ear"));
+    hdBox = new Box(getArea("head"));
 
     pChar = loadSprite("bg1.png", "bg1", 20);
     sprSetSize(pChar, 160, 240);
@@ -155,6 +166,9 @@ function onClick(x, y) {
         addMessage(dialogueID("poke_br","不允许袭胸！[MLT:expression,type=2,tick=5]"));
         modRomance(-1);
         updateExp();
+        flushMessage();
+    }else if (hdBox.isInBox(x,y)) {
+        addMessage(dialogueID("pat_head","摸头...好幸福...")+"[MLT:modstat,type=romancelim,val=5][MLT:modstat,type=moralelim,val=15]");
         flushMessage();
     }else if (leBox.isInBox(x,y)) {
         addMessage(dialogueID("poke_le",""));

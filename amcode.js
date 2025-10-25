@@ -16,16 +16,17 @@ function say(msg){
     flushMessage();
 }
 
-function dialogueID(id,fallback){
-    let result = getDialogue(id);
-    if(result==""){
+function dialogueID(id, fallback) {
+    let result = getDialogue(id); // result is now string[]
+    if (!result || result.length === 0) {
         return fallback;
     }
-    return result;
+    // randomly pick one
+    return result[Math.floor(Math.random() * result.length)];
 }
 
+
 function processMLTCode(code) {
-    //parse MLTCode with the old fashioned switch statement
     let param = parseStringToJson(code);
     switch (param.opcode) {
         case "name":
@@ -51,13 +52,11 @@ function processMLTCode(code) {
             break;
         case "hitokoto":
             return randHitokoto();
-            
         case "expression":
-            overrideExp(param.type,Number(param.tick));
+            overrideExp(param.type, Number(param.tick));
             break;
-
         case "stat":
-            switch(param.type){
+            switch (param.type) {
                 case "hunger":
                     return getHunger();
                 case "thirst":
@@ -70,7 +69,7 @@ function processMLTCode(code) {
                     return "";
             };
         case "modstat":
-            switch(param.type){
+            switch (param.type) {
                 case "hunger":
                     modHunger(Number(param.val));
                     break;
@@ -83,20 +82,43 @@ function processMLTCode(code) {
                 case "romance":
                     modRomance(Number(param.val));
                     break;
+                case "moralelim":
+                    modMoraleLimited(Number(param.val));
+                    break;
+                case "romancelim":
+                    modRomanceLimited(Number(param.val));
+                    break;
                 default:
                     return "";
             };
+            break;
         case "eat":
-            modHunger(Number(param.val),true);
+            modHunger(Number(param.val), true);
             break;
         case "drink":
-            modThirst(Number(param.val),true);
+            modThirst(Number(param.val), true);
             break;
+        case "time":
+            {
+                const now = new Date();
+                return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            }
+        case "date":
+            {
+                const now = new Date();
+                return now.toISOString().split('T')[0];
+            }
+        case "dow": {
+            const now = new Date();
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            return days[now.getDay()];
+        }
         default:
             break;
     }
     return "";
 }
+
 
 function parseStringToJson(input) {
     let result = {};

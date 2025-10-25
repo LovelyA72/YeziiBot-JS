@@ -9,6 +9,13 @@ function runCommand(name) {
     let cmds = cmd.split(".");
     let argc = argv.length;
 
+    // Clear argv storage
+    for (let i = 0; i < 255; i++) {
+        if(!isVarsNull("argv"+i)){
+            setVars("argv" + i, "");
+        }
+    }
+
     setVar("argc", argc);
 
     for (let i = 0; i < argc; i++) {
@@ -27,10 +34,5 @@ function runCommand(name) {
     } else {
         addMessage("未知指令");
         addMessage("发送%help来查看帮助");
-    }
-
-    // Clear argv storage
-    for (let i = 0; i < 255; i++) {
-        setVars("argv" + i, "");
     }
 }
