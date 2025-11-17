@@ -1,3 +1,4 @@
+consoleLog(splitSentence(getVars("message")))
 let processed = splitSentence(getVars("message")).join(" ").replace(/\s+/g,' ');
 processed = processed.replace(/[\p{P}\p{S}]+$/u, '');
 consoleLog("Querying rive: "+processed);

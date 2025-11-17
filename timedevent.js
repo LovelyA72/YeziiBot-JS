@@ -12,9 +12,9 @@ function doTimeActivity(cycle) {
     let modRom = 0;
     let isRestocked = false;
 
-    let restockCounter = getSaveDataNumber("shop_restock");
-    let sanityLimit = getSaveDataNumber("sanity_gain_limit");
-    let affectionLimit = getSaveDataNumber("affection_gain_limit");
+    let restockCounter = Number(getSaveData("shop_restock"));
+    let sanityLimit = Number(getSaveData("sanity_gain_limit"));
+    let affectionLimit = Number(getSaveData("affection_gain_limit"));
 
     // default initialize if not found
     if (isNaN(sanityLimit)) sanityLimit = SAN_LIM;
@@ -27,7 +27,7 @@ function doTimeActivity(cycle) {
             isRestocked = true;
             restockCounter = 0;
         }
-
+        if(getSetting("stats_dec")==1){
         // Hunger/Thirst decay
         modHg -= 1;
         modTh -= 3;
@@ -40,7 +40,7 @@ function doTimeActivity(cycle) {
         if ((getThirst() + modTh) < 35) {
             modSan -= 2;
             modRom -= 1;
-        }
+        }}
 
         //slowly replenish sanity and affection gain limit over time
         if (sanityLimit < SAN_LIM) sanityLimit += SAN_GAIN;
@@ -49,33 +49,32 @@ function doTimeActivity(cycle) {
         if (affectionLimit > ROM_LIM) affectionLimit = ROM_LIM;
         consoleLog("San lim:"+sanityLimit);
         consoleLog("Rom lim:"+affectionLimit);
+        // Cap hunger/thirst deduction to 40%
+        modHg = Math.max(modHg, -4000);
+        modTh = Math.max(modTh, -4000);
+
+        modHunger(modHg);
+        modThirst(modTh);
+        modMorale(modSan);
+        modRomance(modRom);
     }
 
     if (isRestocked) {
         addMessage(dialogueID("shop_restock", "商店进货了呢"));
     }
 
-    // Cap hunger/thirst deduction to 40%
-    modHg = Math.max(modHg, -4000);
-    modTh = Math.max(modTh, -4000);
-
-    modHunger(modHg);
-    modThirst(modTh);
-    modMorale(modSan);
-    modRomance(modRom);
-
     // Save new values
-    setSaveDataNumber("shop_restock", restockCounter);
-    setSaveDataNumber("sanity_gain_limit", Math.min(sanityLimit, SAN_LIM));
-    setSaveDataNumber("affection_gain_limit", Math.min(affectionLimit, ROM_LIM));
+    setSaveData("shop_restock", restockCounter);
+    setSaveData("sanity_gain_limit", Math.min(sanityLimit, SAN_LIM));
+    setSaveData("affection_gain_limit", Math.min(affectionLimit, ROM_LIM));
     flushSaveData();
 }
 
 function checkTimeActivity() {
     const currentTime = unixTime();
-    let lastCallTime = getSaveDataNumber("last_time_act");
-    if (lastCallTime === 0) {
-        setSaveDataNumber("last_time_act", currentTime);
+    let lastCallTime = Number(getSaveData("last_time_act"));
+    if (lastCallTime < 1000000) {
+        setSaveData("last_time_act", currentTime);
         return;
     }
 
@@ -85,7 +84,7 @@ function checkTimeActivity() {
     if (elapsedCycles > 0) {
         doTimeActivity(elapsedCycles);
         const newLastCallTime = lastCallTime + elapsedCycles * (1000 * 60 * 5);
-        setSaveDataNumber("last_time_act", newLastCallTime);
+        setSaveData("last_time_act", newLastCallTime);
     }
     flushSaveData();
 }

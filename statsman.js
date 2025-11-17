@@ -19,7 +19,7 @@ function getUserName() {
 }
 
 function setUserName(name) {
-    return setSettings("name",name);
+    return setSetting("name",name);
 }
 
 function modExp(n) {
@@ -57,16 +57,16 @@ function getBal() {
 }
 
 function getHunger(){
-    return getSaveDataNumber("cs_hunger");
+    return Number(getSaveData("cs_hunger"));
 }
 function getThirst(){
-    return getSaveDataNumber("cs_thirst");
+    return Number(getSaveData("cs_thirst"));
 }
 function getMorale(){
-    return getSaveDataNumber("cs_morale");
+    return Number(getSaveData("cs_morale"));
 }
 function getRomance(){
-    return getSaveDataNumber("cs_romance");
+    return Number(getSaveData("cs_romance"));
 }
 
 function setHunger(n){
@@ -76,7 +76,7 @@ function setHunger(n){
     if(n<0){
         n = 0;
     }
-    return setSaveDataNumber("cs_hunger", n);
+    return setSaveData("cs_hunger", n);
 }
 function setThirst(n){
     if(n>thirstMax){
@@ -85,7 +85,7 @@ function setThirst(n){
     if(n<0){
         n = 0;
     }
-    return setSaveDataNumber("cs_thirst", n);
+    return setSaveData("cs_thirst", n);
 }
 function setMorale(n){
     if(n>moraleMax){
@@ -94,17 +94,17 @@ function setMorale(n){
     if(n<0){
         n = 0;
     }
-    return setSaveDataNumber("cs_morale", n);
+    return setSaveData("cs_morale", n);
 }
 function setRomance(n){
     if(n<0){
         n = 0;
     }
-    return setSaveDataNumber("cs_romance", n);
+    return setSaveData("cs_romance", n);
 }
 
 function modHunger(n,isFromConsumed=false) {
-    let currentVal = getSaveDataNumber("cs_hunger");
+    let currentVal = Number(getSaveData("cs_hunger"));
     if ((currentVal + n) > hungerMax) {
         n = hungerMax - currentVal;
     }
@@ -123,12 +123,12 @@ function modHunger(n,isFromConsumed=false) {
     } else if(n<0) {
         showFloatingMessageColor("🍖 -" + Math.abs(displayVal), 5, 255, 255, 255);
     }
-    setSaveDataNumber("cs_hunger", currentVal + n);
+    setSaveData("cs_hunger", currentVal + n);
     flushSaveData();
 }
 
 function modThirst(n,isFromConsumed=false) {
-    let currentVal = getSaveDataNumber("cs_thirst");
+    let currentVal = Number(getSaveData("cs_thirst"));
     if ((currentVal + n) > thirstMax) {
         n = thirstMax - currentVal;
     }
@@ -147,12 +147,12 @@ function modThirst(n,isFromConsumed=false) {
     } else if(n<0) {
         showFloatingMessageColor("💧 -" + Math.abs(displayVal), 5, 255, 255, 255);
     }
-    setSaveDataNumber("cs_thirst", currentVal + n);
+    setSaveData("cs_thirst", currentVal + n);
     flushSaveData();
 }
 
 function modMorale(n) {
-    let currentVal = getSaveDataNumber("cs_morale");
+    let currentVal = Number(getSaveData("cs_morale"));
     if ((currentVal + n) > moraleMax) {
         n = moraleMax - currentVal;
     }
@@ -165,12 +165,12 @@ function modMorale(n) {
     } else if(n<0) {
         showFloatingMessageColor("SAN -" + Math.abs(displayVal), 5, 255, 255, 255);
     }
-    setSaveDataNumber("cs_morale", currentVal + n);
+    setSaveData("cs_morale", currentVal + n);
     flushSaveData();
 }
 
 function modRomance(n){
-    let currentVal = getSaveDataNumber("cs_romance");
+    let currentVal = Number(getSaveData("cs_romance"));
     if((currentVal+n)<0){
         n = 0-currentVal;
     }
@@ -180,14 +180,14 @@ function modRomance(n){
     }else if(n<0){
         showFloatingMessageColor("♥ -"+Math.abs(displayVal),5,255,255,255);
     }
-    setSaveDataNumber("cs_romance", getSaveDataNumber("cs_romance")+n);
+    setSaveData("cs_romance", Number(getSaveData("cs_romance"))+n);
     flushSaveData();
 }
 
 function modMoraleLimited(n) {
     if (n <= 0) return; // only positive gain is affected by the limit
 
-    let sanityLimit = getSaveDataNumber("sanity_gain_limit");
+    let sanityLimit = getSaveData("sanity_gain_limit");
     if (isNaN(sanityLimit)) sanityLimit = SAN_LIM;
 
     // If limit is zero, no gain possible
@@ -199,7 +199,7 @@ function modMoraleLimited(n) {
     let allowedGain = Math.min(n, sanityLimit);
 
     // Apply morale gain within normal system bounds
-    let currentVal = getSaveDataNumber("cs_morale");
+    let currentVal = Number(getSaveData("cs_morale"));
     if ((currentVal + allowedGain) > moraleMax) {
         allowedGain = moraleMax - currentVal;
     }
@@ -209,8 +209,8 @@ function modMoraleLimited(n) {
         showFloatingMessageColor("SAN +" + displayVal, 5, 20, 255, 20);
     }
 
-    setSaveDataNumber("cs_morale", currentVal + allowedGain);
-    setSaveDataNumber("sanity_gain_limit", Math.max(0, sanityLimit - allowedGain));
+    setSaveData("cs_morale", currentVal + allowedGain);
+    setSaveData("sanity_gain_limit", Math.max(0, sanityLimit - allowedGain));
     consoleLog("Modded sanity to "+(currentVal + allowedGain)+" with remains "+sanityLimit);
     flushSaveData();
 }
@@ -218,7 +218,7 @@ function modMoraleLimited(n) {
 function modRomanceLimited(n) {
     if (n <= 0) return;
 
-    let affectionLimit = getSaveDataNumber("affection_gain_limit");
+    let affectionLimit = getSaveData("affection_gain_limit");
     if (isNaN(affectionLimit)) affectionLimit = ROM_LIM;
 
     if (affectionLimit <= 0) {
@@ -227,13 +227,13 @@ function modRomanceLimited(n) {
 
     let allowedGain = Math.min(n, affectionLimit);
 
-    let currentVal = getSaveDataNumber("cs_romance");
+    let currentVal = Number(getSaveData("cs_romance"));
     let newVal = currentVal + allowedGain;
     let displayVal = (allowedGain / 100.0).toFixed(2);
 
     showFloatingMessageColor("♥ +" + displayVal, 5, 20, 255, 20);
-    setSaveDataNumber("cs_romance", newVal);
-    setSaveDataNumber("affection_gain_limit", Math.max(0, affectionLimit - allowedGain));
+    setSaveData("cs_romance", newVal);
+    setSaveData("affection_gain_limit", Math.max(0, affectionLimit - allowedGain));
     consoleLog("Modded romance to "+(currentVal + allowedGain)+" with remains "+affectionLimit);
     flushSaveData();
 }

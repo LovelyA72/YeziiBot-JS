@@ -9,12 +9,12 @@ const formattedDate = Number(
   date.getDate().toString().padStart(2, '0')
 );
 
-const lastCheckInDate = getSaveDataNumber("checkin_lastChecked");
+const lastCheckInDate = getSaveData("checkin_lastChecked");
 
 if(lastCheckInDate<formattedDate){
     let coinAdd = rand(20,40);
     let expAdd = rand(50,100);
-    setSaveDataNumber("checkin_lastChecked",formattedDate);
+    setSaveData("checkin_lastChecked",formattedDate);
     modBal(coinAdd);
     modExp(expAdd);
     modMorale(250);

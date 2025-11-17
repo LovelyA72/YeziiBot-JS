@@ -10,6 +10,8 @@
 **********************************************/
 include("nerdamer.min.js");
 
+include("config.js")
+
 include("rand.js");
 include("box.js");
 include("chat.js");
@@ -36,39 +38,35 @@ let leBox;
 let reBox;
 let hdBox;
 
-const SAN_LIM = 100;
-const ROM_LIM = 20;
-
-const SAN_GAIN = 20;
-const ROM_GAIN = 5;
-
-const YZJS_VERSION = "0.7.2";
-
-const hentai = ["变态", "垃圾", "恶心"];
-
 function init() {
     //Called when first starting the software
     consoleLog("=======================================");
-    consoleLog("YeziiBot.js 0.7.2 beta");
+    consoleLog(`YeziiBot.js ${YZJS_VERSION} beta`);
     consoleLog("Greetings from NYU ITP!");
     consoleLog("=======================================");
     consoleLog("");
-    if (getSetting("test1") == "") {
-        setSetting("test1", 100);
+    if (getSetting("stats_dec") == null) {
+        setSetting("stats_dec", 1);
+        flushSettings();
     }
     if(getUserName()==""){
         let nameResult = textInput("初めまして!ご主人様~ 请告诉我你的名字吧！");
         if(nameResult==""){
             exit();
         }
-        setSettings("name",nameResult);
+        setSetting("name",nameResult);
         //attempt to use AMLT2025 skin as default
-        setSettings("resourcepack","shimeji");
+        setSetting("resourcepack","shimeji");
         setHunger(10000);
         setThirst(10000);
         setMorale(5000);
         restart();
     }
+
+    setSetting("testStr","kawaii!");
+    setSetting("testInt",69420);
+    setSetting("testFloat",67.67);
+    flushSettings();
 
     brBox = new Box(getArea("breast"));
     tlBox = new Box(getArea("tail"));
@@ -168,7 +166,7 @@ function onClick(x, y) {
         updateExp();
         flushMessage();
     }else if (hdBox.isInBox(x,y)) {
-        addMessage(dialogueID("pat_head","摸头...好幸福...")+"[MLT:modstat,type=romancelim,val=5][MLT:modstat,type=moralelim,val=15]");
+        addMessage(dialogueID("pat_head","摸头...好幸福...")+"[MLT:modstat,type=romancelim,val=15][MLT:modstat,type=moralelim,val=40]");
         flushMessage();
     }else if (leBox.isInBox(x,y)) {
         addMessage(dialogueID("poke_le",""));
